@@ -1,0 +1,43 @@
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Java / Spring Boot
+backend/target/
+backend/.idea/
+backend/.vscode/
+
+# Python virtual environments
+.venv/
+venv/
+
+# IDE / Editor files
+*.iml
+*.ipr
+*.iws
+*.log
+*.swp
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment files
+*.env
+
+# Docker files
+docker-compose.override.yml
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Misc
+*.class
+*.jar
