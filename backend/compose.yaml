@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: analyzai-postgres
+    environment:
+      POSTGRES_DB: analyzai
+      POSTGRES_USER: analyzai
+      POSTGRES_PASSWORD: analyzai
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: analyzai-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/analyzai
+      SPRING_DATASOURCE_USERNAME: analyzai
+      SPRING_DATASOURCE_PASSWORD: analyzai
+    restart: on-failure
+
+volumes:
+  db-data:
