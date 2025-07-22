@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: analyzai-postgres
+    environment:
+      POSTGRES_DB: analyzai
+      POSTGRES_USER: analyzai
+      POSTGRES_PASSWORD: analyzai
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - analyzai-network
+
+  backend:
+    build: ./backend
+    container_name: analyzai-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - python-ai
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/analyzai
+      SPRING_DATASOURCE_USERNAME: analyzai
+      SPRING_DATASOURCE_PASSWORD: analyzai
+    restart: on-failure
+    networks:
+      - analyzai-network
+
+  python-ai:
+    build: ./python-ai
+    container_name: analyzai-python-ai
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    networks:
+      - analyzai-network
+
+volumes:
+  db-data:
+
+networks:
+  analyzai-network:
+    driver: bridge
