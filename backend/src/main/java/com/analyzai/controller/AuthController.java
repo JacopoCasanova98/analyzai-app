@@ -1,5 +1,6 @@
 package com.analyzai.controller;
 
+import com.analyzai.dto.LoginRequestDTO;
 import com.analyzai.dto.UserRegistrationDTO;
 import com.analyzai.model.User;
 import com.analyzai.service.UserService;
@@ -25,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        String token = userService.login(email, password);
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {
+        String token = userService.login(dto.email(), dto.password());
         return ResponseEntity.ok(token);
     }
 
