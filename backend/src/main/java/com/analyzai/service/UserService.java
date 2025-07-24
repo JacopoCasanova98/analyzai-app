@@ -2,6 +2,7 @@ package com.analyzai.service;
 
 import com.analyzai.model.User;
 import com.analyzai.repository.UserRepository;
+import com.analyzai.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

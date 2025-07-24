@@ -1,4 +1,4 @@
-package com.analyzai.service;
+package com.analyzai.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
