@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -16,19 +18,18 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserRegistrationDTO dto) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody UserRegistrationDTO dto) {
         User user = User.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .build();
         userService.register(user);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDTO dto) {
         String token = userService.login(dto.email(), dto.password());
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(Map.of("token", token));
     }
-
 }
