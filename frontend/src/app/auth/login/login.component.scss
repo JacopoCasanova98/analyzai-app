@@ -1,0 +1,25 @@
+.or-separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  
+  .line {
+    flex: 1;
+    height: 1px;
+    background: #ccc;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+  
