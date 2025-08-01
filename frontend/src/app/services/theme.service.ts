@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class ThemeService {
-  isDarkMode = signal(true);
+  isDarkMode = signal(false);
 
   constructor() {
     const saved = localStorage.getItem('dark-mode');
