@@ -1,7 +1,7 @@
 .modal-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(0,0,0,0.4);
+    background-color: var(--background-field-color);
     z-index: 1000;
   }
 
@@ -13,6 +13,7 @@
     flex-direction: column;
     gap: 3rem;
     padding: 2rem;
+    color: var(--text-color);
   }
   
   .logo-img {
@@ -24,7 +25,8 @@
     position: absolute;
     right: 1rem;
     top: 1rem;
-    background: transparent;
+    background: var(--background-field-color);
+    color: var(--text-color);
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
@@ -36,11 +38,15 @@
     left: 50%;
     width: 400px;
     max-width: 90vw;
-    background: white;
+    background: var(--background-sidebar);
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 0 15px rgba(0,0,0,0.3);
     transform: translate(-50%, -50%);
     z-index: 1001;
+  }
+
+  .title {
+    text-align: center;
   }
   

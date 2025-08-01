@@ -22,7 +22,8 @@ import { SnackbarService } from '../../services/snackbar/snackbar.service';
     RegisterComponent
   ],
   template: `
-    <app-modal [title]="isSignUp ? 'Register' : 'Login'" [isOpen]="isOpen" (close)="closeModal()">    
+    <app-modal [title]="isSignUp ? 'Register' : 'Login'" [isOpen]="isOpen" (close)="closeModal()" [logoPath]="logoPath">
+
       <form *ngIf="!isSignUp" [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form">
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Email</mat-label>
@@ -34,7 +35,7 @@ import { SnackbarService } from '../../services/snackbar/snackbar.service';
           <input matInput type="password" formControlName="password" />
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+        <button mat-raised-button type="submit" [disabled]="loginForm.invalid">
           Login
         </button>
 
@@ -44,51 +45,57 @@ import { SnackbarService } from '../../services/snackbar/snackbar.service';
           <div class="line"></div>
         </div>
 
-        <button mat-raised-button color="accent" type="button" (click)="loginSignUpToggle()">
+        <button mat-raised-button type="button" (click)="loginSignUpToggle()">
           Sign Up
         </button>
       </form>
 
-      <app-register *ngIf="isSignUp" (switchToLogin)="loginSignUpToggle()" (closeModal)="closeModal()"></app-register>
+      <app-register
+        *ngIf="isSignUp"
+        [logoPath]="logoPath"
+        (switchToLogin)="loginSignUpToggle()"
+        (closeModal)="closeModal()">
+      </app-register>
+
     </app-modal>
   `,
   styleUrls: ['./login.component.scss']
-  })
-  export class LoginComponent {
-    @Input() isOpen = false;
-    @Output() close = new EventEmitter<void>();
-  
-    isSignUp: boolean = false;
-  
-    loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required)
-    });
-  
-    constructor(private authService: AuthService, private snackbarService: SnackbarService) {}
-  
-    closeModal() {
-      this.close.emit();
-    }
-  
-    submit() {
-      if (this.loginForm.invalid) return;
-    
-      const { email, password } = this.loginForm.value;
-      this.authService.login(email!, password!).subscribe({
-        next: () => {
-          this.snackbarService.showSuccess('Login success');
-          this.closeModal();
-        },
-        error: err => {
-          console.error('Login error:', err);
-          this.snackbarService.showError('Login failed');
-        }
-      });
-    }
-    
-  
-    loginSignUpToggle() {
-      this.isSignUp = !this.isSignUp;
-    }
+})
+export class LoginComponent {
+  @Input() isOpen = false;
+  @Input() logoPath: string = './assets/images/intelligence-dark.png';
+  @Output() close = new EventEmitter<void>();
+
+  isSignUp = false;
+
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', Validators.required)
+  });
+
+  constructor(private authService: AuthService, private snackbarService: SnackbarService) {}
+
+  closeModal() {
+    this.close.emit();
   }
+
+  submit() {
+    if (this.loginForm.invalid) return;
+
+    const { email, password } = this.loginForm.value;
+    this.authService.login(email!, password!).subscribe({
+      next: () => {
+        this.snackbarService.showSuccess('Login success');
+        this.closeModal();
+      },
+      error: err => {
+        console.error('Login error:', err);
+        this.snackbarService.showError('Login failed');
+      }
+    });
+  }
+
+  loginSignUpToggle() {
+    this.isSignUp = !this.isSignUp;
+  }
+}

@@ -2,8 +2,8 @@
 
 <div class="modal" *ngIf="isOpen" (click)="$event.stopPropagation()">
   <header class="modal-header">
-    <img src="./assets/images/intelligence.png" alt="Intelligence" class="logo-img" />
-    <h2>AnalyzeAI</h2>
+    <img [src]="logoPath" alt="Logo" class="logo-img" />
+    <h2 class="title">{{ title }}</h2>
     <button class="close-btn" (click)="onClose()">×</button>
   </header>
   <section class="modal-body">

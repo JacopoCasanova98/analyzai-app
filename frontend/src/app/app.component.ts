@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
@@ -10,6 +10,7 @@ import { take } from 'rxjs/operators';
 import { EmotionResponse } from './models/emotion-response.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -26,21 +27,22 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   template: `
     <mat-sidenav-container class="container">
-      <mat-sidenav #sidenav mode="side" [opened]="!isScreenSmall">
+      <mat-sidenav #sidenav mode="side" [opened]="!isScreenSmall" class="custom-sidenav">
         <app-sidebar (itemClicked)="handleHistoryClick($event)"></app-sidebar>
       </mat-sidenav>
 
       <mat-sidenav-content class="content">
         <app-navbar
           (toggleSidebar)="sidenav.toggle()"
-          (openLogin)="isLoginModalOpen = true">
+          (openLogin)="isLoginModalOpen = true"
+          (themeToggled)="toggleTheme()">
         </app-navbar>
 
         <div class="centered-content">
           <div class="tex-input">
 
           <div class="title-container">
-            <img src="./assets/images/intelligence.png" alt="AnalyzeAI Logo" class="title-logo" />
+            <img [src]="logoPath" alt="AnalyzeAI Logo" class="title-logo" />
             <h3 class="title">{{ typedTitle }}</h3>
           </div>
 
@@ -64,8 +66,10 @@ import { MatIconModule } from '@angular/material/icon';
     <app-login
       *ngIf="isLoginModalOpen"
       [isOpen]="isLoginModalOpen"
+      [logoPath]="logoPath"
       (close)="isLoginModalOpen = false">
     </app-login>
+
   `,
   styles: [`
     .container {
@@ -90,7 +94,8 @@ import { MatIconModule } from '@angular/material/icon';
       align-items: center;
       padding: 1rem;
       gap: 5rem;
-      background: #f5f5f5;
+      background-color: var(--background-color);
+      color: var(--text-color);
     }
 
     .title-container {
@@ -132,7 +137,8 @@ import { MatIconModule } from '@angular/material/icon';
       width: auto;
       max-width: 90vw;
       z-index: 1000;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border: 1px solid var(--text-color);
+      box-shadow: 0 1px 3px var(--text-color);
 
       opacity: 0;
       pointer-events: none;
@@ -148,8 +154,8 @@ import { MatIconModule } from '@angular/material/icon';
     mat-card {
       padding: 1rem 2rem;
       box-sizing: border-box;
-      color: #333;
-      background-color: #fff;
+      background-color: var(--background-color);
+      color: var(--text-color);
     }
 
     .card-title {
@@ -161,7 +167,33 @@ import { MatIconModule } from '@angular/material/icon';
     .card-emotion {
       font-size: 1.5rem;
       text-align: center;
-      color: #444;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .custom-sidenav {
+      background-color: var(--background-sidebar);
+      border-right: 1px solid black;
+      color: var(--text-color);
+      border-radius: 0;
+      overflow-y: auto;
+      scrollbar-width: thin;          
+      scrollbar-color: var(--background-color) transparent; 
+    }
+
+    .custom-sidenav::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-sidenav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-sidenav::-webkit-scrollbar-thumb {
+      background-color: var(--text-color);
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
     }
 
     @keyframes blinkCursor {
@@ -175,6 +207,17 @@ import { MatIconModule } from '@angular/material/icon';
   `]
 })
 export class AppComponent implements OnInit {
+
+  private theme = inject(ThemeService);
+
+  get isDarkMode() {
+    return this.theme.isDarkMode();
+  }
+
+  get logoPath() {
+    return this.theme.getLogoPath();
+  }
+
   isLoginModalOpen = false;
   isScreenSmall = false;
 
@@ -187,6 +230,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.isScreenSmall = window.matchMedia('(max-width: 768px)').matches;
     this.typeWriterEffect();
+    this.theme.applyTheme();
+  }
+
+  toggleTheme() {
+    this.theme.toggleTheme();
   }
 
   getEmoji(emotion: string): string {

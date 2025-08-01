@@ -48,7 +48,8 @@ import { SharedService } from '../../services/text-shared.service';
       max-height: 700px;   
       box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
       border-radius: 12px;
-      background: white;
+      background-color: var(--background-field-color);
+      color: var(--text-color);
       padding: 1rem;
       box-sizing: border-box;
     }
@@ -64,6 +65,8 @@ import { SharedService } from '../../services/text-shared.service';
       width: 100%;
       overflow: auto; 
       transition: border-color 0.3s;
+      background-color: var(--background-field-color);
+      color: var(--text-color);
     }
 
     .text-area:focus {

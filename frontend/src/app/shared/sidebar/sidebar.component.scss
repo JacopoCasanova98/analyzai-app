@@ -1,45 +1,47 @@
 .history-list {
-    min-height: 100vh;     
-    overflow-y: auto;
-    padding: 1rem;
-    margin: 0;
-    gap: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-  }
-  
-  .history-item {
-    margin-bottom: 0.2rem;
-    padding: 2.2rem;
-    border-bottom: 1px solid #e0e0e0;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .history-item:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .text-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    width: 100%;
-  }
-  
-  .main-text {
-    font-weight: 500;
-    font-size: 1rem;
-    color: #222;
-    white-space: nowrap;      
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .timestamp {
-    font-size: 0.75rem;
-    color: #888;
-    font-style: italic;
-  }
-  
+  min-height: 100vh;     
+  overflow-y: auto;
+  padding: 1rem;
+  margin: 0;
+  gap: 1rem;
+  background-color: var(--background-sidebar);
+  color: var(--text-color);
+  border-radius: 8px;
+  box-shadow: var(--text-color);
+}
+
+.history-item {
+  margin-bottom: 0.2rem;
+  padding: 2.2rem;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: var(--text-color);
+}
+
+.history-item:hover {
+  background-color: var(--hover-background-color);
+  color: var(--hover-text-color, var(--text-color));
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+}
+
+.main-text {
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--hover-text-color, var(--text-color));
+  white-space: nowrap;      
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  color: var(--timestamp-color);
+  font-style: italic;
+}

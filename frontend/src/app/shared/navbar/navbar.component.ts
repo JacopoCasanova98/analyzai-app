@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, computed, signal, effect } from '@angular/core';
+import { Component, EventEmitter, Output, inject, computed, signal, Input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,24 +6,28 @@ import { AuthService } from '../../auth/services/auth.service';
 import { ModalComponent } from '../modal/modal.component';
 import { SnackbarService } from '../../services/snackbar/snackbar.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgClass } from '@angular/common';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, ModalComponent, MatSlideToggleModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule, ModalComponent, MatSlideToggleModule, NgClass],
   template: `
-    <mat-toolbar color="primary">
+    <mat-toolbar>
       <button mat-icon-button (click)="toggleSidebar.emit()">
         <mat-icon>menu</mat-icon>
       </button>
       <span>AnalyzAI</span>
       <span class="spacer"></span>
       <mat-slide-toggle 
-        [checked]="isDarkMode" 
-        (change)="toggleTheme()" 
+        [checked]="theme.isDarkMode()"
+        (change)="theme.toggleTheme()"
         class="theme-toggle"
       >
-        Dark Mode
+        <mat-icon [ngClass]="theme.isDarkMode() ? 'icon-light' : 'icon-dark'">
+          {{ theme.isDarkMode() ? 'dark_mode' : 'light_mode' }}
+        </mat-icon>
       </mat-slide-toggle>
       <button mat-button class="login-button" (click)="onLoginLogoutButtonClicked()">
         {{ loginButtonText() }}
@@ -34,9 +38,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
       [isOpen]="showLogoutModal()"
       title="Are you sure?"
       (close)="cancelLogout()"
+      [logoPath]="theme.getLogoPath()"
     >
       <div class="logout-form">
-        <button mat-raised-button color="warn" (click)="confirmLogout()">
+        <button mat-raised-button (click)="confirmLogout()">
           Logout
         </button>
 
@@ -46,7 +51,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
           <div class="line"></div>
         </div>
 
-        <button mat-raised-button color="primary" (click)="cancelLogout()">
+        <button mat-raised-button (click)="cancelLogout()">
           Cancel
         </button>
       </div>
@@ -61,21 +66,16 @@ export class NavbarComponent {
 
   private authService = inject(AuthService);
   private snackbar = inject(SnackbarService);
+  theme = inject(ThemeService);
 
   isLogged = signal(false);
   showLogoutModal = signal(false);
   loginButtonText = computed(() => this.isLogged() ? 'Logout' : 'Login');
-  isDarkMode = false;
 
   constructor() {
     this.authService.isLoggedIn$.subscribe(logged => {
       this.isLogged.set(logged);
     });
-  }  
-
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    this.themeToggled.emit(this.isDarkMode ? 'dark' : 'light');
   }
 
   onLoginLogoutButtonClicked() {
@@ -85,13 +85,13 @@ export class NavbarComponent {
       this.openLogin.emit();
     }
   }
-  
+
   confirmLogout() {
     this.authService.logout();
     this.showLogoutModal.set(false);
     this.snackbar.showSuccess('Logout successful');
   }
-  
+
   cancelLogout() {
     this.showLogoutModal.set(false);
   }

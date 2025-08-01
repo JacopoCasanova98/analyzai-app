@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -52,15 +52,16 @@ import { SnackbarService } from '../../services/snackbar/snackbar.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  @Input() logoPath: string = './assets/images/intelligence-dark.png';
   @Output() switchToLogin = new EventEmitter<void>();
   @Output() closeModal = new EventEmitter<void>();
- 
+
   form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private snackbarService: SnackbarService 
+    private snackbarService: SnackbarService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -94,7 +95,7 @@ export class RegisterComponent {
         error: () => {
           this.snackbarService.showError('Registration failed');
         }
-      });      
+      });
     }
   }
 }
