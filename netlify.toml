@@ -1,5 +1,5 @@
 [build]
-  publish = "frontend/dist/frontend/browser"
+  publish = "dist/frontend/browser"
   command = "npm run build -- --configuration production"
 
 [[redirects]]
